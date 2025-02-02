@@ -4,20 +4,31 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import PrimeVue from 'primevue/config';
+import Chart from 'primevue/chart';
+
 import Aura from '@primevue/themes/aura';
+import 'chartjs-adapter-date-fns';
 
 import App from './App.vue'
 import router from './router'
-
-
-
 
 const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
 app.use(PrimeVue, {
-    theme: Aura
-})
+    // Default theme configuration
+    theme: {
+        preset: Aura,
+        options: {
+            prefix: 'p',
+            darkModeSelector: 'off',
+            
+        }
+    }
+ });
+ app.component('de-chart', Chart);
+
+
 
 app.mount('#app')
