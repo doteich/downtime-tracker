@@ -1,5 +1,6 @@
 import { defineStore } from "pinia"
-import type { Event } from "../types/types.ts"
+import type { Event, DownTimeType, Location } from "../types/types.ts"
+import { ca } from "date-fns/locale"
 
 const url = "http://localhost:8080/"
 
@@ -59,6 +60,50 @@ export const useDataStore = defineStore("dataStore", {
       } catch (error) {
         console.error(error)
       }
+    },
+    async addDownTimeType(dt: DownTimeType) {
+      try {
+        const response = await fetch(`${url}downtime_types`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(dt)
+        })
+        if (response.status >= 400) {
+          throw new Error("Bad response from server: " + response.status)
+        }
+
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    async addLocation(location: Location) {
+      try {
+        const response = await fetch(`${url}locations`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(location)
+        })
+        if (response.status >= 400) {
+          throw new Error("Bad response from server: " + response.status)
+        }
+
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    async getDownTimeTypes() {
+      const response = await fetch(`${url}downtime_types`)
+      const data = await response.json()
+      return data
+    },
+    async getLocations() {
+      const response = await fetch(`${url}locations`)
+      const data = await response.json()
+      return data
     }
 
   }

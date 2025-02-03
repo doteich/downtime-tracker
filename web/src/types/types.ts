@@ -6,4 +6,15 @@ export interface Event {
     location: string;
     color: string;
 }
+export interface Location {
+    id: number;
+    name: string;
+    color: string;
+}
+
+export interface DownTimeType {
+    id: number;
+    name: string;
+    color: string;
+}
 

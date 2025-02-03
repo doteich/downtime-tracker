@@ -5,11 +5,10 @@ import TabList from 'primevue/tablist';
 import Tab from 'primevue/tab';
 import TabPanels from 'primevue/tabpanels';
 import TabPanel from 'primevue/tabpanel';
+import masterData from '../components/masterData.vue';
 
 
 </script>
-
-
 
 
 <template>
@@ -18,7 +17,7 @@ import TabPanel from 'primevue/tabpanel';
             <TabList>
                 <Tab value="0">Erstellen</Tab>
                 <Tab value="1">Ändern</Tab>
-
+                <Tab value="2">Stammdaten</Tab>
             </TabList>
             <TabPanels>
                 <TabPanel value="0">
@@ -29,6 +28,11 @@ import TabPanel from 'primevue/tabpanel';
                 <TabPanel value="1">
                     <p>
                         B
+                    </p>
+                </TabPanel>
+                <TabPanel value="2">
+                    <p>
+                        <master-data></master-data>
                     </p>
                 </TabPanel>
             </TabPanels>
@@ -42,11 +46,11 @@ import TabPanel from 'primevue/tabpanel';
 <style>
 .p-tab-active {
     color: var(--color-primary-1) !important;
-  
+
 }
 
 .p-tablist-active-bar {
     background-color: var(--color-primary-1) !important;
-    
+
 }
 </style>
