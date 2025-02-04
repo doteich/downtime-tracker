@@ -19,6 +19,8 @@ export const useDataStore = defineStore("dataStore", {
       startDate: "2025-01-27T00:00:00.000Z",
       endDate: "2025-01-29T00:00:00.000Z"
     },
+    downTimeTypes: new Array as DownTimeType[],
+    locations: new Array as Location[]
 
   }),
   getters: {
@@ -96,14 +98,23 @@ export const useDataStore = defineStore("dataStore", {
       }
     },
     async getDownTimeTypes() {
-      const response = await fetch(`${url}downtime_types`)
-      const data = await response.json()
-      return data
+      try {
+
+        const response = await fetch(`${url}downtime_types`)
+        const data = await response.json()
+        this.downTimeTypes = data
+      } catch (error) {
+        console.error(error)
+      }
     },
     async getLocations() {
-      const response = await fetch(`${url}locations`)
-      const data = await response.json()
-      return data
+      try {
+        const response = await fetch(`${url}locations`)
+        const data = await response.json()
+        this.locations = data
+      } catch (error) {
+        console.error(error)
+      }
     }
 
   }

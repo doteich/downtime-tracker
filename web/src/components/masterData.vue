@@ -2,11 +2,14 @@
 
 import { ref } from "vue";
 import { useDataStore } from "@/stores/dataStore";
-
-
 import InputText from 'primevue/inputtext';
 import ColorPicker from 'primevue/colorpicker';
 import Button from 'primevue/button';
+import InputGroup from 'primevue/inputgroup';
+import InputGroupAddon from 'primevue/inputgroupaddon';
+
+
+
 import type { DownTimeType, Location } from "@/types/types";
 
 
@@ -43,47 +46,67 @@ function CreateDownTimeType() {
 </script>
 
 <template>
-    <section>
+    <section class="master-data">
         <div class="md-tile">
             <h2>Standort Erstellen</h2>
-            <div class="input-group">
-                <label>Standortname</label>
+            <label>(Farbe) Standortname</label>
+            <InputGroup>
+
+                <InputGroupAddon>
+                    <ColorPicker v-model="location.color" />
+                </InputGroupAddon>
                 <InputText id="location" v-model="location.name" />
-            </div>
-            <div class="input-group">
-                <label>Farbe</label>
-                <ColorPicker v-model="location.color" />
-            </div>
-            <Button label="Erstellen" style="background-color: var(--color-primary-1);" @click="CreateLocation"/>
-        </div>
-        <div class="md-tile">
-            <h2>Stillstandstypen Anlegen</h2>
-            <div class="input-group">
-                <label>Typname</label>
-                <InputText id="type" v-model="downtimeType.name" />
-            </div>
-            <div class="input-group">
-                <label>Farbe</label>
-                <ColorPicker v-model="downtimeType.color" />
-            </div>
-            <Button label="Erstellen" style="background-color: var(--color-primary-1);" @click="CreateDownTimeType"/>
+                <Button label="Erstellen" style="background-color: var(--color-primary-1);" @click="CreateLocation" />
+            </InputGroup>
 
         </div>
+
+        <div class="md-tile">
+            <h2>Stillstandstypen Anlegen</h2>
+            <label>(Farbe) Typname</label>
+            <InputGroup>
+
+                <InputGroupAddon>
+                    <ColorPicker v-model="downtimeType.color" />
+                </InputGroupAddon>
+                <InputText id="type" v-model="downtimeType.name" />
+                <Button label="Erstellen" style="background-color: var(--color-primary-1);"
+                    @click="CreateDownTimeType" />
+            </InputGroup>
+
+        </div>
+
     </section>
 
 
 </template>
 
 <style>
+
+.master-data {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+
 .md-tile {
     display: flex;
     align-items: flex-start;
     flex-direction: column;
     margin: 10px 2px;
     padding: 1rem;
+    min-width: 60%;
+    max-width: 500px;
     border: 1px solid rgb(231, 231, 231);
     border-radius: 2px;
 }
+
+
+
 
 .md-tile>h2 {
     font-style: italic;

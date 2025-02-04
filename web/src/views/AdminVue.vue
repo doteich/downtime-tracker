@@ -6,7 +6,7 @@ import Tab from 'primevue/tab';
 import TabPanels from 'primevue/tabpanels';
 import TabPanel from 'primevue/tabpanel';
 import masterData from '../components/masterData.vue';
-
+import eventCreator from '@/components/eventCreator.vue';
 
 </script>
 
@@ -22,7 +22,7 @@ import masterData from '../components/masterData.vue';
             <TabPanels>
                 <TabPanel value="0">
                     <p>
-                        A
+                        <event-creator></event-creator> 
                     </p>
                 </TabPanel>
                 <TabPanel value="1">
