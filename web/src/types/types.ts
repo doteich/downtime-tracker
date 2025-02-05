@@ -1,10 +1,11 @@
 export interface Event {
-    id: number;
+    id?: number;
     name: string;
-    startDate: string;
-    endDate: string;
+    startDate: Date;
+    endDate: Date;
     location: string;
     color: string;
+    type: string;
 }
 export interface Location {
     id: number;

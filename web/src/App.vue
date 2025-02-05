@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { RouterLink, RouterView } from 'vue-router';
 import router from './router';
+import { useDataStore } from './stores/dataStore';
+
+const store = useDataStore();
 
 // State to track whether the full header is shown
 const showFullHeader = ref(true);
@@ -10,6 +13,16 @@ const showFullHeader = ref(true);
 const toggleHeader = () => {
   showFullHeader.value = !showFullHeader.value;
 };
+
+
+
+onMounted(() => {
+  store.getDownTimeTypes();
+  store.getLocations();
+});
+
+
+
 </script>
 
 <template>
