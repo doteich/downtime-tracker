@@ -19,6 +19,7 @@ const toggleHeader = () => {
 onMounted(() => {
   store.getDownTimeTypes();
   store.getLocations();
+  store.fetchEvents();
 });
 
 
