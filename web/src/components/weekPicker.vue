@@ -43,6 +43,8 @@ const setWeekDates = (w: number) => {
 
     week_start.value = start.toLocaleDateString();
     week_end.value = end.toLocaleDateString();
+
+    store.fetchEvents(start.toISOString(), end.toISOString());
 }
 
 

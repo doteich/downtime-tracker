@@ -70,19 +70,37 @@ const chartOptions = computed(() => {
 const chartPlugins = [ChartDataLabels];
 
 const dat = computed(() => {
-  const events = store.getEvents;
+  let events = store.getEvents;
   let datasets = events.map(event => {
     const startDate = new Date(event.startDate);
     const endDate = new Date(event.endDate);
 
-    const dayOfWeek = getWeekday(startDate);
+    const dayStart = getWeekday(startDate);
+    const dayEnd = getWeekday(endDate);
     const startHour = startDate.getHours() + startDate.getMinutes() / 60;
     const endHour = endDate.getHours() + endDate.getMinutes() / 60;
+
+    if (dayStart !== dayEnd) {
+      return {
+        label: event.location,
+        data: [{
+          x: dayStart,
+          y: [startHour, 24],
+          name: event.name,
+        },
+        {
+          x: dayEnd,
+          y: [0, endHour],
+          name: event.name,
+        }],
+        backgroundColor: setLocationColor(event.location),
+      };
+    }
 
     return {
       label: event.location,
       data: [{
-        x: dayOfWeek,
+        x: dayStart,
         y: [startHour, endHour],
         name: event.name,
       }],
@@ -102,22 +120,11 @@ const getWeekday = (date: Date) => {
 };
 
 const setLocationColor = (l: string) => {
-  let color = "";
-  switch (l) {
-    case "Location A":
-      color = "rgba(255, 99, 132, 0.9)";
-      break;
-    case "Location B":
-      color = "rgba(54, 162, 235, 0.9)";
-      break;
-    case "Location C":
-      color = "rgba(255, 206, 86, 0.9)";
-      break;
-    case "Location D":
-      color = "rgba(75, 192, 192, 0.9)";
-      break;
-  }
-  return color
+
+  const location = store.locations.find(x => x.name === l);
+
+
+  return location ? "#" + location.color : 'green';
 
 }
 
@@ -127,8 +134,10 @@ const setLocationColor = (l: string) => {
 
 <template>
   <div style="height: 80vh">
+   
+
     <de-chart type="bar" :data="dat" :options="chartOptions" :plugins="chartPlugins"></de-chart>
-  
+
   </div>
 </template>
 

@@ -8,12 +8,7 @@ const url = "http://localhost:8080/"
 export const useDataStore = defineStore("dataStore", {
   state: () => ({
     events: [
-      { location: "Location A", startDate: "2025-01-27T09:00:00.000Z", endDate: "2025-01-27T12:00:00.000Z", name: "Event 1", color: "red" },
-      { location: "Location A", startDate: "2025-01-27T09:00:00.000Z", endDate: "2025-01-27T12:00:00.000Z", name: "Event 2", color: "blue" },
-      { location: "Location B", startDate: "2025-01-27T14:00:00.000Z", endDate: "2025-01-27T16:00:00.000Z", name: "Event 3", color: "green" },
-      { location: "Location C", startDate: "2025-01-28T10:00:00.000Z", endDate: "2025-01-28T15:00:00.000Z", name: "Event 4", color: "lime" },
-      { location: "Location D", startDate: "2025-01-29T08:00:00.000Z", endDate: "2025-01-29T10:00:00.000Z", name: "Event 5", color: "gold" },
-      { location: "Location D", startDate: "2025-01-30T08:00:00.000Z", endDate: "2025-01-30T10:00:00.000Z", name: "Event 6", color: "violet" },
+  
     ] as Event[],
     dateRange: {
       startDate: "2025-01-27T00:00:00.000Z",
@@ -42,11 +37,11 @@ export const useDataStore = defineStore("dataStore", {
 
     async fetchEvents(start: string, end: string) {
       try {
-        const response = await fetch(`${url}events`)
-        const data = await response.json()
-        this.events = data
+      const response = await fetch(`${url}events?startDate=${start}&endDate=${end}`)
+      const data = await response.json()
+      this.events = data
       } catch (err) {
-        console.error(err)
+      console.error(err)
       }
     },
     async addEvent(event: Event) {

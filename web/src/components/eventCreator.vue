@@ -20,7 +20,7 @@ const event = ref<Event>({
     type: "",
     startDate: new Date(),
     endDate: new Date(),
-    color: "#000000",
+    color: "dd2840",
 
 });
 
@@ -35,7 +35,7 @@ function submitEvent() {
         type: "",
         startDate: new Date(),
         endDate: new Date(),
-        color: "#000000",
+        color: "dd2840",
     };
     console.log("Event submitted");
 }
@@ -108,6 +108,7 @@ function submitEvent() {
     max-width: 600px;
     width: 50%;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+
 }
 
 .event-creator>h2 {
