@@ -125,7 +125,28 @@ func CreateEvent(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetEvents(w http.ResponseWriter, r *http.Request) {
-	rows, err := dbPool.Query(context.Background(), "SELECT name, start_date, end_date, location, color, type FROM events")
+	startDate := r.URL.Query().Get("startDate")
+	endDate := r.URL.Query().Get("endDate")
+
+	if startDate == "" || endDate == "" {
+		http.Error(w, "start_date and end_date query parameters are required", http.StatusBadRequest)
+		return
+	}
+
+	start, err := time.Parse(time.RFC3339, startDate)
+	if err != nil {
+		http.Error(w, "start_date must be in RFC3339 format", http.StatusBadRequest)
+		return
+	}
+
+	end, err := time.Parse(time.RFC3339, endDate)
+
+	if err != nil {
+		http.Error(w, "end_date must be in RFC3339 format", http.StatusBadRequest)
+		return
+	}
+
+	rows, err := dbPool.Query(context.Background(), "SELECT name, start_date, end_date, location, color, type FROM events WHERE start_date >= $1 AND end_date < $2", start, end)
 	if err != nil {
 		Logger.Error("Error querying events: " + err.Error())
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -136,6 +157,7 @@ func GetEvents(w http.ResponseWriter, r *http.Request) {
 	events := make([]Event, 0)
 	for rows.Next() {
 		var event Event
+
 		if err := rows.Scan(&event.Name, &event.Start, &event.End, &event.Location, &event.Color, &event.Type); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
