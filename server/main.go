@@ -9,6 +9,7 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
@@ -22,11 +23,12 @@ var (
 )
 
 type Event struct {
-	Name     string `json:"name"`
-	Start    string `json:"startDate"`
-	End      string `json:"endDate"`
-	Location string `json:"location"`
-	Color    string `json:"color"`
+	Name     string    `json:"name"`
+	Start    time.Time `json:"startDate"`
+	End      time.Time `json:"endDate"`
+	Type     string    `json:"type"`
+	Location string    `json:"location"`
+	Color    string    `json:"color"`
 }
 
 type Location struct {
@@ -112,7 +114,7 @@ func CreateEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := dbPool.Exec(context.Background(), "INSERT INTO events (name, start_date, end_date, location, color) VALUES ($1, $2, $3, $4, $5)", event.Name, event.Start, event.End, event.Location, event.Color)
+	_, err := dbPool.Exec(context.Background(), "INSERT INTO events (name, start_date, end_date, location, color,type) VALUES ($1, $2, $3, $4, $5, $6)", event.Name, event.Start, event.End, event.Location, event.Color, event.Type)
 	if err != nil {
 		Logger.Error("Error inserting event: " + err.Error())
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -123,7 +125,7 @@ func CreateEvent(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetEvents(w http.ResponseWriter, r *http.Request) {
-	rows, err := dbPool.Query(context.Background(), "SELECT name, start_date, end_date, location, color FROM events")
+	rows, err := dbPool.Query(context.Background(), "SELECT name, start_date, end_date, location, color, type FROM events")
 	if err != nil {
 		Logger.Error("Error querying events: " + err.Error())
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -134,7 +136,7 @@ func GetEvents(w http.ResponseWriter, r *http.Request) {
 	events := make([]Event, 0)
 	for rows.Next() {
 		var event Event
-		if err := rows.Scan(&event.Name, &event.Start, &event.End, &event.Location, &event.Color); err != nil {
+		if err := rows.Scan(&event.Name, &event.Start, &event.End, &event.Location, &event.Color, &event.Type); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}

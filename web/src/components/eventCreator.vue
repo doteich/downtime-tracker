@@ -27,6 +27,18 @@ const event = ref<Event>({
 const locations = computed(() => store.locations);
 const downTimeTypes = computed(() => store.downTimeTypes);
 
+function submitEvent() {
+    store.addEvent(event.value);
+    event.value = {
+        name: "",
+        location: "",
+        type: "",
+        startDate: new Date(),
+        endDate: new Date(),
+        color: "#000000",
+    };
+    console.log("Event submitted");
+}
 
 
 </script>
@@ -59,19 +71,20 @@ const downTimeTypes = computed(() => store.downTimeTypes);
             </div>
             <div class="ei-tile">
                 <label>Standort</label>
-                <Select v-model="event.location" :options="locations" optionLabel="name" placeholder="Standort" />
+                <Select v-model="event.location" :options="locations" optionLabel="name" placeholder="Standort" optionValue="name"  />
             </div>
 
             <div class="ei-tile">
                 <label>Stillstandstyp</label>
-                <Select v-model="event.type" :options="downTimeTypes" optionLabel="name" placeholder="Typ" />
+                <Select v-model="event.type" :options="downTimeTypes" optionLabel="name" placeholder="Typ" optionValue="name" />
             </div>
 
 
             <div class="ei-tile">
-                <Button label="Erstellen" style="background-color: var(--color-primary-1);" />
+                <Button label="Erstellen" style="background-color: var(--color-primary-1);" @click="submitEvent" />
             </div>
         </div>
+
     </section>
 
 </template>
@@ -98,12 +111,11 @@ const downTimeTypes = computed(() => store.downTimeTypes);
 }
 
 .event-creator>h2 {
-    background-color: var(--color-primary-1);
-    
- 
-    color: white;
+    color: var(--color-primary-1);
     padding: 0 10px;
     font-style: italic;
+    border-bottom: 1px solid var(--color-primary-1);
+    
 }
 
 

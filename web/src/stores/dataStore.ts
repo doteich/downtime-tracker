@@ -29,7 +29,7 @@ export const useDataStore = defineStore("dataStore", {
     },
     getDateRange(state) {
       return state.dateRange
-    }
+    },
 
 
   },
@@ -41,9 +41,13 @@ export const useDataStore = defineStore("dataStore", {
     },
 
     async fetchEvents(start: string, end: string) {
-      const response = await fetch(`${url}events`)
-      const data = await response.json()
-      this.events = data
+      try {
+        const response = await fetch(`${url}events`)
+        const data = await response.json()
+        this.events = data
+      } catch (err) {
+        console.error(err)
+      }
     },
     async addEvent(event: Event) {
       try {
@@ -63,6 +67,8 @@ export const useDataStore = defineStore("dataStore", {
         console.error(error)
       }
     },
+
+
     async addDownTimeType(dt: DownTimeType) {
       try {
         const response = await fetch(`${url}downtime_types`, {

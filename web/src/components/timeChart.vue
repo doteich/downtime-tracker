@@ -14,6 +14,10 @@ const store = useDataStore();
 const chartOptions = computed(() => {
 
   let range = store.getDateRange;
+  let locations = store.locations;
+  console.log(locations)
+  let loc = locations?.map(l => l.name);
+
 
   return {
     indexAxis: 'y',
@@ -41,7 +45,7 @@ const chartOptions = computed(() => {
       },
       y: {
         type: 'category',
-        labels: ['Location A', 'Location B', 'Location C', 'Location D'], // Y-axis labels
+        labels: loc, // Y-axis labels
       },
     },
 
@@ -78,7 +82,7 @@ const dat = computed(() => {
       x: [event.startDate, event.endDate], // Time range for the bar
       y: event.location, // Location on the y-axis
     }],
-    backgroundColor: event.color,
+    backgroundColor: "#"+event.color,
 
   }));
 
