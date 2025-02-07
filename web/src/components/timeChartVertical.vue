@@ -145,5 +145,6 @@ const setLocationColor = (l: string) => {
 canvas {
   height: 80vh !important;
   color: rgba(126, 126, 126, 0.527);
+  
 }
 </style>

@@ -52,13 +52,13 @@ const chartOptions = computed(() => {
     plugins: {
       datalabels: {
         color: 'black',
-        borderRadius: 2,
+        borderRadius: 4,
         borderColor: "grey",
-
-        align: "start",
+        backgroundColor:"rgba(230, 230, 230, 0.844)",
+        align: "center",
         formatter: function (value: string, context: any) {
           console.log(value, context);
-          return context.dataset.label + "➡️"
+          return context.dataset.label
         }
       }
     }
@@ -108,5 +108,6 @@ const dat = computed(() => {
 canvas {
   height: 80vh !important;
   color: rgba(126, 126, 126, 0.527);
-}
+
+  }
 </style>

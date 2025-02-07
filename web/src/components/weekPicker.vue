@@ -35,7 +35,7 @@ const updateWeek = (delta: number) => {
 const setWeekDates = (w: number) => {
     let d = setWeek(new Date(), w);
     let end = lastDayOfWeek(d, { weekStartsOn: 1 })
-    end.setDate(end.getDate() - 2)
+    end.setDate(end.getDate() - 1)
     let start = startOfWeek(d, { weekStartsOn: 1 })
 
 
