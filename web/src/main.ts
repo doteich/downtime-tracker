@@ -9,6 +9,9 @@ import Chart from 'primevue/chart';
 import Aura from '@primevue/themes/aura';
 import 'chartjs-adapter-date-fns';
 
+
+import ToastService from 'primevue/toastservice';
+
 import App from './App.vue'
 import router from './router'
 
@@ -27,6 +30,9 @@ app.use(PrimeVue, {
         }
     }
  });
+
+ app.use(ToastService);
+
  app.component('de-chart', Chart);
 
 

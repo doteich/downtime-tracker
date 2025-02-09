@@ -103,6 +103,11 @@ func initDB() error {
 	if err != nil {
 		return err
 	}
+
+	if err := dbPool.Ping(context.Background()); err != nil {
+		return err
+	}
+
 	return nil
 }
 

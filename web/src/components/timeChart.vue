@@ -3,9 +3,12 @@ import { computed, ref } from 'vue';
 import { useDataStore } from "@/stores/dataStore";
 import Chart from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import annotationPlugin from 'chartjs-plugin-annotation';
+
 
 
 Chart.register(ChartDataLabels);
+Chart.register(annotationPlugin);
 
 const store = useDataStore();
 
@@ -50,17 +53,65 @@ const chartOptions = computed(() => {
     },
 
     plugins: {
+      tooltip: {
+        callbacks: {
+          label: function (context: any) {
+            let d_start = new Date(context.parsed._custom.barStart).toLocaleString()
+            let d_end = new Date(context.parsed._custom.barEnd).toLocaleString()
+            return `${d_start} - ${d_end}`
+          },
+          title: function (context: any) {
+            return context[0].dataset.label
+          }
+        }
+      },
       datalabels: {
         color: 'black',
         borderRadius: 4,
         borderColor: "grey",
-        backgroundColor:"rgba(230, 230, 230, 0.844)",
+        backgroundColor: "rgba(230, 230, 230, 0.844)",
         align: "center",
         formatter: function (value: string, context: any) {
-          console.log(value, context);
+
           return context.dataset.label
         }
+      },
+      annotation: {
+        annotations: {
+          box1: {
+            type: 'box',
+            xMin: new Date('2025-02-02T23:00:00.000Z').getTime(),
+            xMax: new Date('2025-02-03T23:00:00.000Z').getTime(),
+            yMin: -0.5,
+            yMax: 2.5,
+            backgroundColor: 'rgba(0, 0, 0, 0.00)',
+            label: {
+              content: "Montag",
+              display: true,
+              position: {
+                x: 'center',
+                y: 'end'},
+            }
+          },
+          box2: {
+            type: 'box',
+            xMin: new Date('2025-02-03T23:00:00.000Z').getTime(),
+            xMax: new Date('2025-02-04T23:00:00.000Z').getTime(),
+            yMin: -0.5,
+            yMax: 2.5,
+            backgroundColor: 'rgba(0, 0, 0, 0.00)',
+            label: {
+              content: 'Label 1',
+              display: true,
+              position: {
+                x: 'center',
+                y: 'end'},
+            }
+          }
+        },
+        
       }
+
     }
   }
 
@@ -82,7 +133,9 @@ const dat = computed(() => {
       x: [event.startDate, event.endDate], // Time range for the bar
       y: event.location, // Location on the y-axis
     }],
-    backgroundColor: "#"+event.color,
+    barPercentage: 2,
+    maxBarThickness: 50,
+    backgroundColor: "#" + event.color,
 
   }));
 
@@ -109,5 +162,6 @@ canvas {
   height: 80vh !important;
   color: rgba(126, 126, 126, 0.527);
 
-  }
+
+}
 </style>

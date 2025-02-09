@@ -1,6 +1,7 @@
 import { defineStore } from "pinia"
 import type { Event, DownTimeType, Location } from "../types/types.ts"
-import { ca } from "date-fns/locale"
+import type { ToastMessageOptions } from "primevue/toast"
+
 
 const url = "http://localhost:8080/"
 
@@ -8,14 +9,21 @@ const url = "http://localhost:8080/"
 export const useDataStore = defineStore("dataStore", {
   state: () => ({
     events: [
-  
+
     ] as Event[],
     dateRange: {
       startDate: "2025-01-27T00:00:00.000Z",
       endDate: "2025-01-29T00:00:00.000Z"
     },
     downTimeTypes: new Array as DownTimeType[],
-    locations: new Array as Location[]
+    locations: new Array as Location[],
+
+    toast: {
+      severity: "info",
+      summary: "",
+      detail: "",
+      life: 3000,
+    } as ToastMessageOptions
 
   }),
   getters: {
@@ -25,6 +33,9 @@ export const useDataStore = defineStore("dataStore", {
     getDateRange(state) {
       return state.dateRange
     },
+    getToast(state) {
+      return state.toast
+    }
 
 
   },
@@ -37,11 +48,17 @@ export const useDataStore = defineStore("dataStore", {
 
     async fetchEvents(start: string, end: string) {
       try {
-      const response = await fetch(`${url}events?startDate=${start}&endDate=${end}`)
-      const data = await response.json()
-      this.events = data
+        const response = await fetch(`${url}events?startDate=${start}&endDate=${end}`)
+        const data = await response.json()
+        this.events = data
+
       } catch (err) {
-      console.error(err)
+        this.toast = {
+          severity: "error",
+          summary: "Eventabfrage fehlgeschlagen",
+          detail: "Daten konnten nicht geladen werden",
+          life: 5000
+        }
       }
     },
     async addEvent(event: Event) {
@@ -59,7 +76,12 @@ export const useDataStore = defineStore("dataStore", {
 
 
       } catch (error) {
-        console.error(error)
+        this.toast = {
+          severity: "error",
+          summary: "Fehler beim Speichern",
+          detail: "Event konnte nicht hinzugefügt werden",
+          life: 5000
+        }
       }
     },
 
@@ -78,7 +100,12 @@ export const useDataStore = defineStore("dataStore", {
         }
 
       } catch (error) {
-        console.error(error)
+        this.toast = {
+          severity: "error",
+          summary: "Fehler beim Speichern",
+          detail: "Typ konnte nicht hinzugefügt werden",
+          life: 5000
+        }
       }
     },
     async addLocation(location: Location) {
@@ -95,7 +122,12 @@ export const useDataStore = defineStore("dataStore", {
         }
 
       } catch (error) {
-        console.error(error)
+        this.toast = {
+          severity: "error",
+          summary: "Fehler beim Speichern",
+          detail: "Standort konnte nicht hinzugefügt werden",
+          life: 5000
+        }
       }
     },
     async getDownTimeTypes() {
@@ -105,7 +137,12 @@ export const useDataStore = defineStore("dataStore", {
         const data = await response.json()
         this.downTimeTypes = data
       } catch (error) {
-        console.error(error)
+        this.toast = {
+          severity: "error",
+          summary: "Fehler beim Abruf",
+          detail: "Typen konnten nicht abgerufen werden",
+          life: 5000
+        }
       }
     },
     async getLocations() {
@@ -114,7 +151,12 @@ export const useDataStore = defineStore("dataStore", {
         const data = await response.json()
         this.locations = data
       } catch (error) {
-        console.error(error)
+        this.toast = {
+          severity: "error",
+          summary: "Fehler beim Abruf",
+          detail: "Standorte konnten nicht abgerufen werden",
+          life: 5000
+        }
       }
     }
 

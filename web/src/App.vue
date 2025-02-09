@@ -1,10 +1,19 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { RouterLink, RouterView } from 'vue-router';
 import router from './router';
 import { useDataStore } from './stores/dataStore';
+import { storeToRefs } from 'pinia'
+
+
+import Toast from 'primevue/toast';
+import { useToast } from 'primevue/usetoast';
+
 
 const store = useDataStore();
+const toast = useToast();
+
+const { getToast } = storeToRefs(store)
 
 // State to track whether the full header is shown
 const showFullHeader = ref(true);
@@ -19,8 +28,16 @@ const toggleHeader = () => {
 onMounted(() => {
   store.getDownTimeTypes();
   store.getLocations();
-  store.fetchEvents();
+  store.fetchEvents;
 });
+
+watch(getToast, (value) => {
+  console.log(value);
+  if (value) {
+    toast.add({ severity: value.severity, summary: value.summary, detail: value.detail, life: value.life });
+  }
+});
+
 
 
 
@@ -33,7 +50,7 @@ onMounted(() => {
       <nav>
         <ul class="nav-list">
           <li>
-            <!-- Button to toggle the header -->
+
             <button @click="toggleHeader"><i class="bi bi-box-arrow-in-up-right"></i></button>
           </li>
           <li>
@@ -45,12 +62,13 @@ onMounted(() => {
         </ul>
       </nav>
 
-      <!-- Conditionally render the full header content -->
+
 
     </header>
 
 
     <main>
+      <Toast />
       <RouterView />
     </main>
   </div>

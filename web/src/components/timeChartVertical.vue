@@ -35,6 +35,7 @@ const chartOptions = computed(() => {
     },
 
     plugins: {
+
       legend: {
         labels: {
           generateLabels: function (chart: any) {
@@ -59,7 +60,7 @@ const chartOptions = computed(() => {
         backgroundColor: "lightgrey",
         align: "center",
         formatter: function (value: string, context: any) {
-          console.log(context.dataset)
+         
           return context.dataset.data[0].name;
         }
       }

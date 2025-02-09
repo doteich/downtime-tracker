@@ -24,6 +24,8 @@ const event = ref<Event>({
 
 });
 
+const colorDisabled = ref(true);
+
 const locations = computed(() => store.locations);
 const downTimeTypes = computed(() => store.downTimeTypes);
 
@@ -37,7 +39,7 @@ function submitEvent() {
         endDate: new Date(),
         color: "dd2840",
     };
-    console.log("Event submitted");
+   
 }
 
 
@@ -51,9 +53,12 @@ function submitEvent() {
                 <label>(Farbe) Eventname</label>
                 <InputGroup>
                     <InputGroupAddon>
-                        <ColorPicker v-model="event.color" />
+                        <ColorPicker v-model="event.color" :disabled="colorDisabled"/>
                     </InputGroupAddon>
                     <InputText id="location" v-model="event.name" placeholder="Stillstand ABC" />
+                    <InputGroupAddon>
+                        <Button severity="secondary" icon="bi bi-unlock" @click="colorDisabled = !colorDisabled"></Button>
+                    </InputGroupAddon>
                 </InputGroup>
             </div>
             <div class="date-pick">
