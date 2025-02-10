@@ -42,6 +42,12 @@ function submitEvent() {
    
 }
 
+function setColor(){
+    let type = event.value.type;
+    let color = store.downTimeTypes.find(t => t.name === type)?.color;
+    event.value.color = color || "dd2840";
+}
+
 
 </script>
 
@@ -81,12 +87,12 @@ function submitEvent() {
 
             <div class="ei-tile">
                 <label>Stillstandstyp</label>
-                <Select v-model="event.type" :options="downTimeTypes" optionLabel="name" placeholder="Typ" optionValue="name" />
+                <Select v-model="event.type" :options="downTimeTypes" optionLabel="name" placeholder="Typ" optionValue="name" @change="setColor()"/>
             </div>
 
 
             <div class="ei-tile">
-                <Button label="Erstellen" style="background-color: var(--color-primary-1);" @click="submitEvent" />
+                <Button label="Erstellen" style="background-color: var(--color-primary-1);" @click="submitEvent" :disabled="event.location == '' || event.type == '' || event.name == ''"/>
             </div>
         </div>
 

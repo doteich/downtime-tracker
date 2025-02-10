@@ -4,22 +4,59 @@ import { useDataStore } from "@/stores/dataStore";
 import Chart from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import annotationPlugin from 'chartjs-plugin-annotation';
-
-
+import { eachDayOfInterval } from "date-fns";
 
 Chart.register(ChartDataLabels);
 Chart.register(annotationPlugin);
 
 const store = useDataStore();
 
+const getWeekday = (day: number) => {
+  const days = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
+  return days[day];
+};
 
 
 const chartOptions = computed(() => {
 
   let range = store.getDateRange;
+
   let locations = store.locations;
-  console.log(locations)
   let loc = locations?.map(l => l.name);
+
+  let days = eachDayOfInterval({
+    start: new Date(range.startDate),
+    end: new Date(range.endDate)
+  });
+
+
+  let boxes = {} as any;
+
+  days.forEach(day => {
+    let d = new Date(day);
+    let dayName = getWeekday(d.getDay());
+    let dayStart = new Date(d.setHours(0, 0, 0, 0));
+    let dayEnd = new Date(d.setHours(23, 59, 59, 999));
+    boxes[dayName] = {
+      type: 'box',
+      xMin: dayStart.getTime(),
+      xMax: dayEnd.getTime(),
+      yMin: -0.5,
+      yMax: 2.5,
+      backgroundColor: 'rgba(0, 0, 0, 0.00)',
+      label: {
+        content: dayName,
+        display: true,
+        position: {
+          x: 'center',
+          y: 'end'
+        },
+      }
+    }
+  });
+
+  console.log(boxes)
+
 
 
   return {
@@ -77,39 +114,8 @@ const chartOptions = computed(() => {
         }
       },
       annotation: {
-        annotations: {
-          box1: {
-            type: 'box',
-            xMin: new Date('2025-02-02T23:00:00.000Z').getTime(),
-            xMax: new Date('2025-02-03T23:00:00.000Z').getTime(),
-            yMin: -0.5,
-            yMax: 2.5,
-            backgroundColor: 'rgba(0, 0, 0, 0.00)',
-            label: {
-              content: "Montag",
-              display: true,
-              position: {
-                x: 'center',
-                y: 'end'},
-            }
-          },
-          box2: {
-            type: 'box',
-            xMin: new Date('2025-02-03T23:00:00.000Z').getTime(),
-            xMax: new Date('2025-02-04T23:00:00.000Z').getTime(),
-            yMin: -0.5,
-            yMax: 2.5,
-            backgroundColor: 'rgba(0, 0, 0, 0.00)',
-            label: {
-              content: 'Label 1',
-              display: true,
-              position: {
-                x: 'center',
-                y: 'end'},
-            }
-          }
-        },
-        
+        annotations: boxes
+
       }
 
     }
