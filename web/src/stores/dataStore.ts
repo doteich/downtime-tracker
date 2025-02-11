@@ -23,7 +23,9 @@ export const useDataStore = defineStore("dataStore", {
       summary: "",
       detail: "",
       life: 3000,
-    } as ToastMessageOptions
+    } as ToastMessageOptions,
+    refreshInterval: 120,
+
 
   }),
   getters: {
@@ -158,6 +160,31 @@ export const useDataStore = defineStore("dataStore", {
           life: 5000
         }
       }
+    },
+    async removeEvent(id: string) {
+      try {
+        const response = await fetch(`${url}events/${id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+        })
+        if (response.status >= 400) {
+          throw new Error("Bad response from server: " + response.status)
+        }
+        return true
+      } catch (error) {
+        this.toast = {
+          severity: "error",
+          summary: "Fehler beim Löschen",
+          detail: "Event konnte nicht gelöscht werden",
+          life: 5000
+        }
+        return false
+      }
+
+
     }
 
   }

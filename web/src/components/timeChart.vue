@@ -30,6 +30,7 @@ const chartOptions = computed(() => {
   });
 
 
+
   let boxes = {} as any;
 
   days.forEach(day => {
@@ -42,7 +43,7 @@ const chartOptions = computed(() => {
       xMin: dayStart.getTime(),
       xMax: dayEnd.getTime(),
       yMin: -0.5,
-      yMax: 2.5,
+      yMax: locations.length - 0.5,
       backgroundColor: 'rgba(0, 0, 0, 0.00)',
       label: {
         content: dayName,

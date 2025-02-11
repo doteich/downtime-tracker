@@ -17,26 +17,33 @@ const store = useDataStore();
 
 const location = ref({
     name: "",
-    color: "",
+    color: "2e2b6e",
 } as Location)
 
 const downtimeType = ref({
     name: "",
-    color: "",
+    color: "2e2b6e",
 } as DownTimeType)
 
 function CreateLocation() {
+    
     if (location.value.name === "" || location.value.color === "") {
         return;
     }
+    
+    
     store.addLocation(location.value);
+    location.value.name = ""
 }
 
 function CreateDownTimeType() {
     if (downtimeType.value.name === "" || downtimeType.value.color === "") {
         return;
     }
+
+   
     store.addDownTimeType(downtimeType.value);
+    downtimeType.value.name = ""
 }
 
 
@@ -49,6 +56,7 @@ function CreateDownTimeType() {
     <section class="master-data">
         <div class="md-tile">
             <h2>Standort Erstellen</h2>
+  
             <label>(Farbe) Standortname</label>
             <InputGroup>
 
@@ -56,7 +64,8 @@ function CreateDownTimeType() {
                     <ColorPicker v-model="location.color" />
                 </InputGroupAddon>
                 <InputText id="location" v-model="location.name" />
-                <Button label="Erstellen" style="background-color: var(--color-primary-1);" @click="CreateLocation" />
+                <Button label="Erstellen" style="background-color: var(--color-primary-1);" @click="CreateLocation"
+                    :disabled="location.name == ''" />
             </InputGroup>
 
         </div>
@@ -70,8 +79,8 @@ function CreateDownTimeType() {
                     <ColorPicker v-model="downtimeType.color" />
                 </InputGroupAddon>
                 <InputText id="type" v-model="downtimeType.name" />
-                <Button label="Erstellen" style="background-color: var(--color-primary-1);"
-                    @click="CreateDownTimeType" />
+                <Button label="Erstellen" style="background-color: var(--color-primary-1);" @click="CreateDownTimeType"
+                    :disabled="downtimeType.name == ''" />
             </InputGroup>
 
         </div>
@@ -82,14 +91,13 @@ function CreateDownTimeType() {
 </template>
 
 <style>
-
 .master-data {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    
+
 }
 
 

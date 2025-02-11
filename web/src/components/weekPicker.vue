@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import Button from 'primevue/button';
-import { getWeek, setWeek, lastDayOfWeek, startOfWeek } from "date-fns"
+import { getWeek, setWeek, lastDayOfWeek, startOfWeek, addSeconds } from "date-fns"
 import { useDataStore } from "@/stores/dataStore"
 
 const store = useDataStore();
@@ -13,13 +13,24 @@ const week_end = ref("");
 
 
 onMounted(() => {
-
     let date = new Date();
     let w = getWeek(date);
     week.value = w
     week_number.value = w;
     setWeekDates(w);
+
+    setInterval(() => { refresh() }, store.refreshInterval*1000)
+
 });
+
+const refresh = () => {
+    let date = new Date();
+    let w = getWeek(date);
+    week.value = w
+    week_number.value = w;
+    setWeekDates(w);
+}
+
 
 const updateWeek = (delta: number) => {
     if (week.value == 1 && delta == -1) {

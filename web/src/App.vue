@@ -4,10 +4,11 @@ import { RouterLink, RouterView } from 'vue-router';
 import router from './router';
 import { useDataStore } from './stores/dataStore';
 import { storeToRefs } from 'pinia'
-
-
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
+import Dialog from 'primevue/dialog';
+import Button from 'primevue/button';
+
 
 
 const store = useDataStore();
@@ -23,6 +24,7 @@ const toggleHeader = () => {
   showFullHeader.value = !showFullHeader.value;
 };
 
+const showInvModal = ref(false)
 
 
 onMounted(() => {
@@ -32,11 +34,16 @@ onMounted(() => {
 });
 
 watch(getToast, (value) => {
-  console.log(value);
+
   if (value) {
     toast.add({ severity: value.severity, summary: value.summary, detail: value.detail, life: value.life });
   }
 });
+
+function setInterval(i: number) {
+  store.refreshInterval = i
+}
+
 
 
 
@@ -49,10 +56,16 @@ watch(getToast, (value) => {
       <h1 v-if="showFullHeader" style="font-style: italic;">{{ router.currentRoute.value.meta.title }}</h1>
       <nav>
         <ul class="nav-list">
+
           <li>
 
             <button @click="toggleHeader"><i class="bi bi-box-arrow-in-up-right"></i></button>
           </li>
+          <li>
+
+            <button @click="showInvModal = !showInvModal"><i class="bi bi bi-clock-history"></i></button>
+          </li>
+
           <li>
             <RouterLink to="/"><i class="bi bi-house-door"></i></RouterLink>
           </li>
@@ -68,6 +81,14 @@ watch(getToast, (value) => {
 
 
     <main>
+      <Dialog v-model:visible="showInvModal" modal header="Aktualisierungsrate (s)" :style="{ width: '25rem' }">
+        <div class="modal">
+          <input type="number" :value="store.refreshInterval">
+          <button>Ok</button>
+        </div>
+      </Dialog>
+
+
       <Toast />
       <RouterView />
     </main>
@@ -170,4 +191,29 @@ header.overlay+main {
   padding-top: 10px;
   /* Aligns content to the nav height when the header title is hidden */
 }
+
+.modal {
+  padding: 5px;
+  display: flex;
+}
+.modal > button{
+  background: var(--color-primary-1);
+  border: none;
+  color: white;
+  font-weight: bolder;
+  padding:  5px 10px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  cursor: pointer;
+}
+
+.modal > button:active{
+  color: gold;
+}
+
+.modal > input{
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
 </style>
