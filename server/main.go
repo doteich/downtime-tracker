@@ -23,6 +23,7 @@ var (
 )
 
 type Event struct {
+	Id       int       `json:"id"`
 	Name     string    `json:"name"`
 	Start    time.Time `json:"startDate"`
 	End      time.Time `json:"endDate"`
@@ -79,6 +80,7 @@ func main() {
 
 	r.Post("/events", CreateEvent)
 	r.Get("/events", GetEvents)
+	r.Delete("/events/{id}", DeleteEvent)
 	r.Post("/locations", CreateLocation)
 	r.Get("/locations", GetLocations)
 	r.Post("/downtime_types", CreateDowntimeType)
@@ -151,7 +153,7 @@ func GetEvents(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rows, err := dbPool.Query(context.Background(), "SELECT name, start_date, end_date, location, color, type FROM events WHERE start_date >= $1 AND end_date < $2", start, end)
+	rows, err := dbPool.Query(context.Background(), "SELECT name, start_date, end_date, location, color, type, id FROM events WHERE start_date >= $1 AND end_date < $2", start, end)
 	if err != nil {
 		Logger.Error("Error querying events: " + err.Error())
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -163,7 +165,7 @@ func GetEvents(w http.ResponseWriter, r *http.Request) {
 	for rows.Next() {
 		var event Event
 
-		if err := rows.Scan(&event.Name, &event.Start, &event.End, &event.Location, &event.Color, &event.Type); err != nil {
+		if err := rows.Scan(&event.Name, &event.Start, &event.End, &event.Location, &event.Color, &event.Type, &event.Id); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
