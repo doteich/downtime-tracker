@@ -1,5 +1,7 @@
 <script setup lang="ts">
-
+import { onMounted } from 'vue';
+import { useDataStore } from '@/stores/dataStore';
+import router from '@/router';
 import Tabs from 'primevue/tabs';
 import TabList from 'primevue/tablist';
 import Tab from 'primevue/tab';
@@ -8,6 +10,16 @@ import TabPanel from 'primevue/tabpanel';
 import masterData from '../components/masterData.vue';
 import eventCreator from '@/components/eventCreator.vue';
 import eventChanger from '@/components/eventChanger.vue';
+
+const store = useDataStore();
+
+onMounted(() => {
+    if (store.credentials.username === '' || store.credentials.password === '') {
+        router.push('/login');
+    }
+});
+
+
 
 </script>
 

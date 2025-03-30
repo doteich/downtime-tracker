@@ -70,7 +70,7 @@ function setInterval(i: number) {
             <RouterLink to="/"><i class="bi bi-house-door"></i></RouterLink>
           </li>
           <li>
-            <RouterLink to="/admin"><i class="bi bi-wrench-adjustable"></i></RouterLink>
+            <RouterLink to="/login"><i class="bi bi-wrench-adjustable"></i></RouterLink>
           </li>
         </ul>
       </nav>

@@ -74,8 +74,49 @@ export const useDataStore = defineStore("dataStore", {
       }
     },
     async login(username: string, password: string) {
+      try {
+        const response = await fetch(`${url}login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ username, password })
+        })
+        if (response.status >= 400) {
+          throw new Error("Bad response from server: " + response.status)
+        }
 
+        this.toast = {
+          severity: "success",
+          summary: "Login erfolgreich",
+          detail: "Anmeldung erfolgreich",
+          life: 5000
+        }
+        this.credentials = { username, password }
 
+        setTimeout(() => {
+          this.credentials = { username: "", password: "" }
+
+          this.toast = {
+            severity: "warn",
+            summary: "Automatische Abmeldung",
+            detail: "Abmelden...",
+            life: 5000
+          }
+
+        }, 60 * 1000 * 30)
+
+        return true
+      } catch (err) {
+        console.error(err)
+        this.toast = {
+          severity: "error",
+          summary: "Login fehlgeschlagen",
+          detail: "Anmeldung fehlgeschlagen",
+          life: 5000
+        }
+      }
+      return false
     },
 
     async addEvent(event: Event) {
